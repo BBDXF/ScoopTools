@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace ScoopTools
 {
@@ -41,7 +42,7 @@ namespace ScoopTools
                 var p = proxyList[i];
                 var delay = await scoopActions.checkUrlDelay(p.url);
                 p.latency = delay;
-                label_status.Text = $"[{i+1}/{proxyList.Count}] {p.url} => {delay}ms ...";
+                label_status.Text = $"[{i + 1}/{proxyList.Count}] {p.url} => {delay}ms ...";
             }
 
             // sort
@@ -64,10 +65,10 @@ namespace ScoopTools
             Log("\r\n正在请求可用github Proxy...\r\n");
             proxyList = await scoopActions.getGithubProxyList();
             Log($"获取成功，一共 [ {proxyList.Count} ] 记录:\r\n\r\n- 序号 - server ----- 理论延时 - URL --------\r\n");
-            for(var i=0;i<proxyList.Count;i++)
+            for (var i = 0; i < proxyList.Count; i++)
             {
                 var p = proxyList[i];
-                Log($" [{(i+1).ToString("D3")}]  {p.server.PadRight(16)} {p.latency}\t{p.url}\r\n");
+                Log($" [{(i + 1).ToString("D3")}]  {p.server.PadRight(16)} {p.latency}\t{p.url}\r\n");
             }
             textBox_proxy_url.Text = proxyList[0].url;
             label_status.Text = "已选择第一个proxy，建议测试最佳proxy后使用，或者手动填写!";
@@ -81,7 +82,7 @@ namespace ScoopTools
         private void button_proxy_set_Click(object sender, EventArgs e)
         {
             var proxy = textBox_proxy_url.Text;
-            if (proxy.Length == 0  || !proxy.StartsWith("http"))
+            if (proxy.Length == 0 || !proxy.StartsWith("http"))
             {
                 MessageBox.Show("请设置一个有效的Proxy地址！\r\n【提示：】可以使用获取Github Proxy自动查找可用Proxy地址！", "参数错误");
                 return;
@@ -203,7 +204,7 @@ namespace ScoopTools
                 Log($"[{(i + 1).ToString("D3")}] {fmtBucketList(p)}\r\n");
             }
 
-            if(comboBox_bucket_list.Items.Count > 0)
+            if (comboBox_bucket_list.Items.Count > 0)
             {
                 comboBox_bucket_list.SelectedIndex = 0;
             }
@@ -222,7 +223,7 @@ namespace ScoopTools
         private void button_bucket_del_Click(object sender, EventArgs e)
         {
             var msg = $"你确定要【删除】bucket {textBox_bucket_name.Text} 吗?";
-            if(MessageBox.Show(msg, "警告", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(msg, "警告", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Log($"正在删除 bucket...\r\n");
                 var cmd = $"scoop bucket rm {textBox_bucket_name.Text}";
@@ -308,7 +309,7 @@ namespace ScoopTools
         private string fmtAppList(string[] list)
         {
             if (list.Length != 5) return "";
-            return $"{list[0].PadRight(16)} {list[1].PadRight(12)} {list[2].PadRight(8)} {list[3].PadRight(20)}";
+            return $"{list[0].PadRight(20)} {list[1].PadRight(16)} {list[2].PadRight(12)} {list[3].PadRight(20)}";
         }
         private void button_app_list_Click(object sender, EventArgs e)
         {
@@ -330,7 +331,7 @@ namespace ScoopTools
         {
             var cmd = "scoop update ";
             var count = 0;
-            for(var i = 0; i < checkedListBox_app_list.Items.Count; i++)
+            for (var i = 0; i < checkedListBox_app_list.Items.Count; i++)
             {
                 if (checkedListBox_app_list.GetItemChecked(i))
                 {
@@ -388,6 +389,9 @@ namespace ScoopTools
 
         private void button_search_Click(object sender, EventArgs e)
         {
+            textBox_search_bucket.Text = "";
+            textBox_search_json.Text = "";
+
             var cmd = "scoop search ";
             if (radioButton_ss_old.Checked)
             {
@@ -408,7 +412,8 @@ namespace ScoopTools
                 return;
             }
             cmd += app;
-            if (!radioButton_ss_soft.Checked) { 
+            if (!radioButton_ss_soft.Checked)
+            {
                 Log($"\r\n开始执行搜索指令 {cmd} ，此行为耗时很长，耐心等待...\r\n");
                 var output = scoopActions.runPowershellCmd(cmd);
                 Log($"Done: \r\n{output}\r\n");
@@ -419,83 +424,106 @@ namespace ScoopTools
                 var root = scoopActions.getScoopRootPath();
                 var search_results = new Dictionary<string, List<string>>();
                 Log($"\r\n开始执行软件搜索，耐心等待...\r\n");
-                var dirList = Directory.EnumerateDirectories(root+"/buckets").ToList(); // 全路径
+                var dirList = Directory.EnumerateDirectories(root + "\\buckets").ToList(); // 全路径
                 //官方仓库优先
-                var buckets_first = new string[] { "main", "extras", "versions", "nonportable" };
-                for (var i = dirList.Count - 1;  i >= 0; i--)
+                var buckets_first = new string[] { "main", "extras", "versions", "nonportable", "sysinternals", "nirsoft" };
+                for (var i = dirList.Count - 1; i >= 0; i--)
                 {
                     var dirname = Path.GetFileName(dirList[i]);
                     label_status.Text = $"正在搜索 {dirname} ...";
-                    if ( buckets_first.Contains(dirname) )
+                    if (buckets_first.Contains(dirname))
                     {
                         // find logic
-                        var json = search_app_json(app, Path.Combine(root, "buckets", dirname));
-                        if ( json != null )
+                        Log($"bucket [{dirname}]:\r\n");
+                        var json = search_app_json(app, Path.Combine(root, "buckets", dirname, "bucket"));
+                        if (json != null && json.Count > 0)
                         {
                             search_results.Add(dirname, json);
                         }
-                        Log($"{dirname.PadRight(12)} => count {json.Count}\r\n");
                         // remove it
                         dirList.RemoveAt(i);
                     }
                 }
                 // 然后其他bucket
-                for (var i = 0; i < dirList.Count - 1; i++)
+                for (var i = 0; i < dirList.Count; i++)
                 {
-                    var dirname = Path.GetDirectoryName(dirList[i]);
+                    var dirname = Path.GetFileName(dirList[i]);
                     label_status.Text = $"正在搜索 {dirname} ...";
                     // find logic
-                    var json = search_app_json(app, Path.Combine(root, "buckets", dirname));
-                    if (json != null)
+                    Log($"bucket [{dirname}]:\r\n");
+                    var json = search_app_json(app, Path.Combine(root, "buckets", dirname, "bucket"));
+                    if (json != null && json.Count > 0)
                     {
                         search_results.Add(dirname, json);
                     }
-                    Log($"{dirname.PadRight(12)} => {json.Count}\r\n");
                 }
-                Log($"\r\n遍历完成，查找最相似结果...\r\n");
+                Log($"遍历完成，匹配最相似结果...\r\n");
+                label_status.Text = "搜索完成";
+
                 // 查找最相似
                 string result_bucket = null;
                 string result_json = null;
-                foreach(var key in search_results.Keys)
+                foreach (var b in buckets_first)
                 {
-                    var f = Path.GetFileNameWithoutExtension(search_results[key].ToLower());
-                    if ( f == app)
+                    if (search_results.Keys.Contains(b))
                     {
-                        result_bucket = key;
-                        result_json = search_results[key];
-                        break;
-                    }
-                    if (f.Contains(app))
-                    {
-                        result_bucket = key;
-                        result_json = search_results[key];
-                        break;
-                    }
-                    if (app.Contains(' ') || app.Contains('-') || app.Contains('_'))
-                    {
-                        var key_words = app.Split(new char[] { ' ', '-', '_' }, StringSplitOptions.RemoveEmptyEntries);
-                        if(key_words.All( val => f.Contains(val)))
+                        var json = search_results[b].Find(val => Path.GetFileNameWithoutExtension(val) == app);
+                        if (json != null && json.Length > 0)
                         {
-                            result_bucket = key;
-                            result_json = search_results[key];
+                            result_bucket = b;
+                            result_json = Path.GetFileName(json);
+                            break;
+                        }
+                    }
+                }
+                // 再次到第三方bucket里查找
+                if(result_json == null)
+                {
+                    foreach(var k in search_results.Keys)
+                    {
+                        if (buckets_first.Contains(k)) continue;
+                        var json = search_results[k].Find(val => Path.GetFileNameWithoutExtension(val) == app);
+                        if (json != null && json.Length > 0)
+                        {
+                            result_bucket = k;
+                            result_json = Path.GetFileName(json);
                             break;
                         }
                     }
                 }
                 // result
-                Log($"找到的最佳选项为 【{result_bucket}】 {result_json}");
+                if (result_json == null)
+                {
+                    Log("没有找到名称完全匹配的软件，请根据搜索结果修改查询条件后，再试!\r\n");
+                }
+                else
+                {
+                    Log($"找到的最佳选项为 【{result_bucket}】 {result_json}\r\n");
+                    textBox_search_bucket.Text = result_bucket;
+                    textBox_search_json.Text = result_json;
+
+                    // read app info
+                    var name = result_json.Substring(0, result_json.Length - 5);
+                    var output = scoopActions.runPowershellCmd($"scoop info {result_bucket}/{name}");
+                    Log(output+"\r\n");
+                }
+
             }
         }
 
         public List<string> search_app_json(string app, string bucketPath)
         {
             var result_json = new List<string>();
+            var index = 0;
             foreach (var key in Directory.EnumerateFiles(bucketPath, "*.json"))
             {
                 var f = Path.GetFileNameWithoutExtension(key);
+                Debug.WriteLine($"{f} vs {app}  in {key}\r\n");
                 if (f.Contains(app))
                 {
                     result_json.Add(key);
+                    index += 1;
+                    Log($"  {index.ToString("D2")}. {f}\r\n");
                 }
                 else if (app.Contains(' ') || app.Contains('-') || app.Contains('_'))
                 {
@@ -503,9 +531,12 @@ namespace ScoopTools
                     if (key_words.All(val => f.Contains(val)))
                     {
                         result_json.Add(key);
+                        index += 1;
+                        Log($"  {index.ToString("D2")}. {f}\r\n");
                     }
                 }
             }
+            Log("\r\n");
             return result_json;
         }
 
@@ -529,6 +560,62 @@ namespace ScoopTools
             // 基于程序自己的搜索功能，查找到对应的bucket + json
             // 修改 json文件中的url地址，支持install行为
             // 基于git revert 指令还原仓库的修改
+            var bucket = textBox_search_bucket.Text;
+            var json = textBox_search_json.Text;
+            if (bucket.Length == 0)
+            {
+                MessageBox.Show("请使用软件搜索功能查找到对应bucket和json文件后，再使用此功能!");
+                return;
+            }
+            var proxy = textBox_proxy_url.Text;
+            if (proxy.Length == 0 || !proxy.StartsWith("http"))
+            {
+                MessageBox.Show("请设置一个有效的Proxy地址！\r\n【提示：】可以使用获取Github Proxy自动查找可用Proxy地址！", "参数错误");
+                return;
+            }
+            Log($"\r\n检查下载url，添加Proxy ...\r\n");
+            var file = Path.Combine(scoopActions.getScoopRootPath(), "buckets", bucket, "bucket", json);
+            var content = File.ReadAllText(file);
+            content = content.Replace("\"https://github.com", $"\"{proxy}/https://github.com");
+            content = content.Replace("\"https://raw.githubusercontent.com", $"\"{proxy}/https://raw.githubusercontent.com");
+            File.WriteAllText(file, content);
+            // install
+            var cmd = $"scoop install {bucket}/{Path.GetFileNameWithoutExtension(json)}";
+            Log($"Url修改完成，开始执行安装 {cmd} ...\r\n");            
+            var output = scoopActions.runPowershellCmd(cmd);
+            Log($"Done: \r\n{output}\r\n");
+
+            // revert
+            Log($"开始恢复本地 bucket 文件 ...\r\n");
+            var dir = Path.Combine(scoopActions.getScoopRootPath(), "buckets", bucket);
+            cmd = "&{ cd "+dir+ "; git checkout .; }";
+            output = scoopActions.runPowershellCmd(cmd);
+            Log($"Done: \r\n{output}\r\n");
+        }
+
+        private void button_app_bucket_Click(object sender, EventArgs e)
+        {
+            var bucket = textBox_app_bucket_new.Text.Trim();
+            if (bucket.Length == 0)
+            {
+                MessageBox.Show("没有提供新的bucket名字！\r\n提示：可以在search页面，查找到之后再修改!", "警告");
+                return;
+            }
+            Log("\r\n开始修改选中 app 的 bucket ...\r\n");
+            for (var i = 0; i < appList.valueList.Count; i++)
+            {
+                if ( checkedListBox_app_list.GetItemChecked(i) )
+                {
+                    var app = appList.valueList[i];
+                    var file = Path.Combine(scoopActions.getScoopRootPath(), "apps", app[0], "current", "install.json");
+                    var json = File.ReadAllText(file);
+                    var data = JObject.Parse(json);
+                    Log($"  {app[0]} bucket {data["bucket"]} => {bucket}\r\n");
+                    data["bucket"] = bucket;
+                    File.WriteAllText(file, data.ToString());
+                }
+            }
+            Log("Done.\r\n");
         }
     }
 }

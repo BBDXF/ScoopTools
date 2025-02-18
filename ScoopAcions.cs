@@ -111,6 +111,8 @@ namespace ScoopTools
             buckets["extras"] = "https://github.com/ScoopInstaller/Extras";
             buckets["versions"] = "https://github.com/ScoopInstaller/Versions";
             buckets["nonportable"] = "https://github.com/ScoopInstaller/Nonportable";
+            buckets["sysinternals"] = "https://github.com/niheaven/scoop-sysinternals";
+            buckets["nirsoft"] = "https://github.com/ScoopInstaller/Nirsoft";
 
             if ( proxy!=null && proxy.Length > 0 )
             {
@@ -228,11 +230,10 @@ namespace ScoopTools
                     // 检查是否有错误信息
                     if (!string.IsNullOrEmpty(error))
                     {
-                        //output = $"执行命令时发生错误: {error}\r\n";
-                        output = null;
+                        output += $"\r\n{error}\r\n";
                     }
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
                     // 处理异常
                     //output = $"发生异常: {ex.Message}";

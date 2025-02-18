@@ -50,6 +50,7 @@ namespace ScoopTools
             this.button_install_official_proxy = new System.Windows.Forms.Button();
             this.button_install_official = new System.Windows.Forms.Button();
             this.tabPage_buckets = new System.Windows.Forms.TabPage();
+            this.button_bucket_install_official = new System.Windows.Forms.Button();
             this.textBox_bucket_update = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox_bucket_apps = new System.Windows.Forms.TextBox();
@@ -66,40 +67,40 @@ namespace ScoopTools
             this.button_bucket_list = new System.Windows.Forms.Button();
             this.button_bucket_official = new System.Windows.Forms.Button();
             this.tabPage_apps = new System.Windows.Forms.TabPage();
+            this.button_app_uninstall = new System.Windows.Forms.Button();
+            this.button_app_bucket = new System.Windows.Forms.Button();
+            this.button_app_bucket_update = new System.Windows.Forms.Button();
+            this.button_app_update = new System.Windows.Forms.Button();
+            this.button_app_list = new System.Windows.Forms.Button();
+            this.checkedListBox_app_list = new System.Windows.Forms.CheckedListBox();
+            this.tabPage_search = new System.Windows.Forms.TabPage();
+            this.textBox_search_json = new System.Windows.Forms.TextBox();
+            this.textBox_search_bucket = new System.Windows.Forms.TextBox();
+            this.button_search_install_proxy = new System.Windows.Forms.Button();
+            this.button_search_install = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.radioButton_ss_ss = new System.Windows.Forms.RadioButton();
+            this.radioButton_ss_go = new System.Windows.Forms.RadioButton();
+            this.radioButton_ss_soft = new System.Windows.Forms.RadioButton();
+            this.radioButton_ss_old = new System.Windows.Forms.RadioButton();
+            this.button_search = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox_search = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label_status = new System.Windows.Forms.Label();
             this.button_log_clear = new System.Windows.Forms.Button();
             this.textBox_log = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button_bucket_install_official = new System.Windows.Forms.Button();
-            this.checkedListBox_app_list = new System.Windows.Forms.CheckedListBox();
-            this.button_app_list = new System.Windows.Forms.Button();
-            this.button_app_bucket_update = new System.Windows.Forms.Button();
-            this.button_app_bucket = new System.Windows.Forms.Button();
-            this.button_app_update = new System.Windows.Forms.Button();
-            this.tabPage_search = new System.Windows.Forms.TabPage();
-            this.button_app_uninstall = new System.Windows.Forms.Button();
-            this.textBox_search = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.button_search = new System.Windows.Forms.Button();
-            this.radioButton_ss_old = new System.Windows.Forms.RadioButton();
-            this.radioButton_ss_go = new System.Windows.Forms.RadioButton();
-            this.radioButton_ss_ss = new System.Windows.Forms.RadioButton();
-            this.label8 = new System.Windows.Forms.Label();
-            this.button_search_install = new System.Windows.Forms.Button();
-            this.button_search_install_proxy = new System.Windows.Forms.Button();
-            this.textBox_search_bucket = new System.Windows.Forms.TextBox();
-            this.textBox_search_json = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.radioButton_ss_soft = new System.Windows.Forms.RadioButton();
+            this.textBox_app_bucket_new = new System.Windows.Forms.TextBox();
             this.tabMain.SuspendLayout();
             this.tabPage_index.SuspendLayout();
             this.tabPage_proxy.SuspendLayout();
             this.tabPage_install.SuspendLayout();
             this.tabPage_buckets.SuspendLayout();
             this.tabPage_apps.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.tabPage_search.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
@@ -147,10 +148,10 @@ namespace ScoopTools
             this.tabPage_proxy.Controls.Add(this.textBox_proxy_url);
             this.tabPage_proxy.Controls.Add(this.button_proxy_get);
             this.tabPage_proxy.Controls.Add(this.button_proxy_check_best);
-            this.tabPage_proxy.Location = new System.Drawing.Point(4, 33);
+            this.tabPage_proxy.Location = new System.Drawing.Point(4, 28);
             this.tabPage_proxy.Name = "tabPage_proxy";
             this.tabPage_proxy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_proxy.Size = new System.Drawing.Size(770, 363);
+            this.tabPage_proxy.Size = new System.Drawing.Size(770, 368);
             this.tabPage_proxy.TabIndex = 1;
             this.tabPage_proxy.Text = "1. 代理";
             this.tabPage_proxy.UseVisualStyleBackColor = true;
@@ -207,9 +208,9 @@ namespace ScoopTools
             this.tabPage_install.Controls.Add(this.button_install_pre);
             this.tabPage_install.Controls.Add(this.button_install_official_proxy);
             this.tabPage_install.Controls.Add(this.button_install_official);
-            this.tabPage_install.Location = new System.Drawing.Point(4, 33);
+            this.tabPage_install.Location = new System.Drawing.Point(4, 28);
             this.tabPage_install.Name = "tabPage_install";
-            this.tabPage_install.Size = new System.Drawing.Size(770, 363);
+            this.tabPage_install.Size = new System.Drawing.Size(770, 368);
             this.tabPage_install.TabIndex = 2;
             this.tabPage_install.Text = "2. 安装";
             this.tabPage_install.UseVisualStyleBackColor = true;
@@ -244,6 +245,7 @@ namespace ScoopTools
             this.button_proxy_info.TabIndex = 8;
             this.button_proxy_info.Text = "查看scoop_repo";
             this.button_proxy_info.UseVisualStyleBackColor = true;
+            this.button_proxy_info.Click += new System.EventHandler(this.button_proxy_info_Click);
             // 
             // button_proxy_reset
             // 
@@ -253,6 +255,7 @@ namespace ScoopTools
             this.button_proxy_reset.TabIndex = 7;
             this.button_proxy_reset.Text = "Reset scoop_repo";
             this.button_proxy_reset.UseVisualStyleBackColor = true;
+            this.button_proxy_reset.Click += new System.EventHandler(this.button_proxy_reset_Click);
             // 
             // button_proxy_set
             // 
@@ -262,6 +265,7 @@ namespace ScoopTools
             this.button_proxy_set.TabIndex = 6;
             this.button_proxy_set.Text = "scoop_repo 添加proxy";
             this.button_proxy_set.UseVisualStyleBackColor = true;
+            this.button_proxy_set.Click += new System.EventHandler(this.button_proxy_set_Click);
             // 
             // button_install_env_set
             // 
@@ -340,12 +344,22 @@ namespace ScoopTools
             this.tabPage_buckets.Controls.Add(this.button_bucket_del);
             this.tabPage_buckets.Controls.Add(this.button_bucket_list);
             this.tabPage_buckets.Controls.Add(this.button_bucket_official);
-            this.tabPage_buckets.Location = new System.Drawing.Point(4, 33);
+            this.tabPage_buckets.Location = new System.Drawing.Point(4, 28);
             this.tabPage_buckets.Name = "tabPage_buckets";
-            this.tabPage_buckets.Size = new System.Drawing.Size(770, 363);
+            this.tabPage_buckets.Size = new System.Drawing.Size(770, 368);
             this.tabPage_buckets.TabIndex = 3;
             this.tabPage_buckets.Text = "3. Buckets";
             this.tabPage_buckets.UseVisualStyleBackColor = true;
+            // 
+            // button_bucket_install_official
+            // 
+            this.button_bucket_install_official.Location = new System.Drawing.Point(345, 238);
+            this.button_bucket_install_official.Name = "button_bucket_install_official";
+            this.button_bucket_install_official.Size = new System.Drawing.Size(336, 38);
+            this.button_bucket_install_official.TabIndex = 11;
+            this.button_bucket_install_official.Text = "【Proxy】添加Official常见buckets";
+            this.button_bucket_install_official.UseVisualStyleBackColor = true;
+            this.button_bucket_install_official.Click += new System.EventHandler(this.button_bucket_install_official_Click);
             // 
             // textBox_bucket_update
             // 
@@ -490,6 +504,7 @@ namespace ScoopTools
             // 
             // tabPage_apps
             // 
+            this.tabPage_apps.Controls.Add(this.textBox_app_bucket_new);
             this.tabPage_apps.Controls.Add(this.button_app_uninstall);
             this.tabPage_apps.Controls.Add(this.button_app_bucket);
             this.tabPage_apps.Controls.Add(this.button_app_bucket_update);
@@ -502,6 +517,224 @@ namespace ScoopTools
             this.tabPage_apps.TabIndex = 4;
             this.tabPage_apps.Text = "4. Apps";
             this.tabPage_apps.UseVisualStyleBackColor = true;
+            // 
+            // button_app_uninstall
+            // 
+            this.button_app_uninstall.ForeColor = System.Drawing.Color.Red;
+            this.button_app_uninstall.Location = new System.Drawing.Point(593, 174);
+            this.button_app_uninstall.Name = "button_app_uninstall";
+            this.button_app_uninstall.Size = new System.Drawing.Size(126, 41);
+            this.button_app_uninstall.TabIndex = 1;
+            this.button_app_uninstall.Text = "卸载软件";
+            this.button_app_uninstall.UseVisualStyleBackColor = true;
+            this.button_app_uninstall.Click += new System.EventHandler(this.button_app_uninstall_Click);
+            // 
+            // button_app_bucket
+            // 
+            this.button_app_bucket.ForeColor = System.Drawing.Color.Red;
+            this.button_app_bucket.Location = new System.Drawing.Point(551, 302);
+            this.button_app_bucket.Name = "button_app_bucket";
+            this.button_app_bucket.Size = new System.Drawing.Size(211, 41);
+            this.button_app_bucket.TabIndex = 1;
+            this.button_app_bucket.Text = "修改 app 的 bucket";
+            this.toolTip1.SetToolTip(this.button_app_bucket, "请确认你知道此功能的作用，否则不要随意修改!");
+            this.button_app_bucket.UseVisualStyleBackColor = true;
+            this.button_app_bucket.Click += new System.EventHandler(this.button_app_bucket_Click);
+            // 
+            // button_app_bucket_update
+            // 
+            this.button_app_bucket_update.Location = new System.Drawing.Point(593, 66);
+            this.button_app_bucket_update.Name = "button_app_bucket_update";
+            this.button_app_bucket_update.Size = new System.Drawing.Size(126, 41);
+            this.button_app_bucket_update.TabIndex = 1;
+            this.button_app_bucket_update.Text = "更新buckets";
+            this.button_app_bucket_update.UseVisualStyleBackColor = true;
+            this.button_app_bucket_update.Click += new System.EventHandler(this.button_app_bucket_update_Click);
+            // 
+            // button_app_update
+            // 
+            this.button_app_update.Location = new System.Drawing.Point(593, 117);
+            this.button_app_update.Name = "button_app_update";
+            this.button_app_update.Size = new System.Drawing.Size(126, 41);
+            this.button_app_update.TabIndex = 1;
+            this.button_app_update.Text = "更新软件";
+            this.button_app_update.UseVisualStyleBackColor = true;
+            this.button_app_update.Click += new System.EventHandler(this.button_app_update_Click);
+            // 
+            // button_app_list
+            // 
+            this.button_app_list.Location = new System.Drawing.Point(593, 14);
+            this.button_app_list.Name = "button_app_list";
+            this.button_app_list.Size = new System.Drawing.Size(126, 41);
+            this.button_app_list.TabIndex = 1;
+            this.button_app_list.Text = "刷新列表";
+            this.button_app_list.UseVisualStyleBackColor = true;
+            this.button_app_list.Click += new System.EventHandler(this.button_app_list_Click);
+            // 
+            // checkedListBox_app_list
+            // 
+            this.checkedListBox_app_list.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkedListBox_app_list.FormattingEnabled = true;
+            this.checkedListBox_app_list.Location = new System.Drawing.Point(3, 3);
+            this.checkedListBox_app_list.Name = "checkedListBox_app_list";
+            this.checkedListBox_app_list.Size = new System.Drawing.Size(542, 354);
+            this.checkedListBox_app_list.TabIndex = 0;
+            // 
+            // tabPage_search
+            // 
+            this.tabPage_search.Controls.Add(this.textBox_search_json);
+            this.tabPage_search.Controls.Add(this.textBox_search_bucket);
+            this.tabPage_search.Controls.Add(this.button_search_install_proxy);
+            this.tabPage_search.Controls.Add(this.button_search_install);
+            this.tabPage_search.Controls.Add(this.label8);
+            this.tabPage_search.Controls.Add(this.radioButton_ss_ss);
+            this.tabPage_search.Controls.Add(this.radioButton_ss_go);
+            this.tabPage_search.Controls.Add(this.radioButton_ss_soft);
+            this.tabPage_search.Controls.Add(this.radioButton_ss_old);
+            this.tabPage_search.Controls.Add(this.button_search);
+            this.tabPage_search.Controls.Add(this.label9);
+            this.tabPage_search.Controls.Add(this.label7);
+            this.tabPage_search.Controls.Add(this.textBox_search);
+            this.tabPage_search.Location = new System.Drawing.Point(4, 28);
+            this.tabPage_search.Name = "tabPage_search";
+            this.tabPage_search.Size = new System.Drawing.Size(770, 368);
+            this.tabPage_search.TabIndex = 5;
+            this.tabPage_search.Text = "5. Search";
+            this.tabPage_search.UseVisualStyleBackColor = true;
+            // 
+            // textBox_search_json
+            // 
+            this.textBox_search_json.Location = new System.Drawing.Point(270, 129);
+            this.textBox_search_json.Name = "textBox_search_json";
+            this.textBox_search_json.ReadOnly = true;
+            this.textBox_search_json.Size = new System.Drawing.Size(215, 30);
+            this.textBox_search_json.TabIndex = 7;
+            // 
+            // textBox_search_bucket
+            // 
+            this.textBox_search_bucket.Location = new System.Drawing.Point(132, 129);
+            this.textBox_search_bucket.Name = "textBox_search_bucket";
+            this.textBox_search_bucket.ReadOnly = true;
+            this.textBox_search_bucket.Size = new System.Drawing.Size(121, 30);
+            this.textBox_search_bucket.TabIndex = 7;
+            // 
+            // button_search_install_proxy
+            // 
+            this.button_search_install_proxy.ForeColor = System.Drawing.Color.Red;
+            this.button_search_install_proxy.Location = new System.Drawing.Point(513, 122);
+            this.button_search_install_proxy.Name = "button_search_install_proxy";
+            this.button_search_install_proxy.Size = new System.Drawing.Size(180, 42);
+            this.button_search_install_proxy.TabIndex = 6;
+            this.button_search_install_proxy.Text = "【Proxy】安装";
+            this.toolTip1.SetToolTip(this.button_search_install_proxy, "通过Proxy下载安装软件!\r\n此方案必须配合软件自身app查找功能使用！");
+            this.button_search_install_proxy.UseVisualStyleBackColor = true;
+            this.button_search_install_proxy.Click += new System.EventHandler(this.button_search_install_proxy_Click);
+            // 
+            // button_search_install
+            // 
+            this.button_search_install.ForeColor = System.Drawing.Color.Blue;
+            this.button_search_install.Location = new System.Drawing.Point(627, 19);
+            this.button_search_install.Name = "button_search_install";
+            this.button_search_install.Size = new System.Drawing.Size(102, 43);
+            this.button_search_install.TabIndex = 5;
+            this.button_search_install.Text = "安装";
+            this.toolTip1.SetToolTip(this.button_search_install, "原生方式安装软件");
+            this.button_search_install.UseVisualStyleBackColor = true;
+            this.button_search_install.Click += new System.EventHandler(this.button_search_install_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.Navy;
+            this.label8.Location = new System.Drawing.Point(23, 192);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(723, 144);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "几种搜索方式的区别：\r\n\r\n1. 原生搜索，速度慢，展示信息详细。\r\n2. scoop-search, 第三方golang编写，搜索本地bucket得到数据，速度" +
+    "快。【需要安装】\r\n3. ss, 第三方软件信息仓库，包含了本地bucket和网上记录的常用软件。【需要安装】\r\n4. 软件自身方案。【推荐】【支持Proxy安" +
+    "装功能】";
+            // 
+            // radioButton_ss_ss
+            // 
+            this.radioButton_ss_ss.AutoSize = true;
+            this.radioButton_ss_ss.Location = new System.Drawing.Point(367, 68);
+            this.radioButton_ss_ss.Name = "radioButton_ss_ss";
+            this.radioButton_ss_ss.Size = new System.Drawing.Size(158, 28);
+            this.radioButton_ss_ss.TabIndex = 3;
+            this.radioButton_ss_ss.Text = "ss (基于数据库)";
+            this.radioButton_ss_ss.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_ss_go
+            // 
+            this.radioButton_ss_go.AutoSize = true;
+            this.radioButton_ss_go.Location = new System.Drawing.Point(212, 68);
+            this.radioButton_ss_go.Name = "radioButton_ss_go";
+            this.radioButton_ss_go.Size = new System.Drawing.Size(149, 28);
+            this.radioButton_ss_go.TabIndex = 3;
+            this.radioButton_ss_go.Text = "scoop-search";
+            this.radioButton_ss_go.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_ss_soft
+            // 
+            this.radioButton_ss_soft.AutoSize = true;
+            this.radioButton_ss_soft.Checked = true;
+            this.radioButton_ss_soft.Location = new System.Drawing.Point(102, 68);
+            this.radioButton_ss_soft.Name = "radioButton_ss_soft";
+            this.radioButton_ss_soft.Size = new System.Drawing.Size(107, 28);
+            this.radioButton_ss_soft.TabIndex = 3;
+            this.radioButton_ss_soft.TabStop = true;
+            this.radioButton_ss_soft.Text = "软件搜索";
+            this.radioButton_ss_soft.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_ss_old
+            // 
+            this.radioButton_ss_old.AutoSize = true;
+            this.radioButton_ss_old.Location = new System.Drawing.Point(531, 68);
+            this.radioButton_ss_old.Name = "radioButton_ss_old";
+            this.radioButton_ss_old.Size = new System.Drawing.Size(137, 28);
+            this.radioButton_ss_old.TabIndex = 3;
+            this.radioButton_ss_old.Text = "原生搜索(慢)";
+            this.radioButton_ss_old.UseVisualStyleBackColor = true;
+            // 
+            // button_search
+            // 
+            this.button_search.Location = new System.Drawing.Point(513, 19);
+            this.button_search.Name = "button_search";
+            this.button_search.Size = new System.Drawing.Size(95, 43);
+            this.button_search.TabIndex = 2;
+            this.button_search.Text = "搜索";
+            this.button_search.UseVisualStyleBackColor = true;
+            this.button_search.Click += new System.EventHandler(this.button_search_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(8, 132);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(119, 25);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "bucket info:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(24, 28);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(102, 25);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "查找的软件";
+            // 
+            // textBox_search
+            // 
+            this.textBox_search.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox_search.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.textBox_search.Location = new System.Drawing.Point(130, 19);
+            this.textBox_search.Name = "textBox_search";
+            this.textBox_search.Size = new System.Drawing.Size(377, 43);
+            this.textBox_search.TabIndex = 0;
+            this.textBox_search.Text = "scoop-search";
             // 
             // panel1
             // 
@@ -546,229 +779,17 @@ namespace ScoopTools
             this.textBox_log.Size = new System.Drawing.Size(778, 314);
             this.textBox_log.TabIndex = 4;
             // 
-            // button_bucket_install_official
+            // textBox_app_bucket_new
             // 
-            this.button_bucket_install_official.Location = new System.Drawing.Point(345, 238);
-            this.button_bucket_install_official.Name = "button_bucket_install_official";
-            this.button_bucket_install_official.Size = new System.Drawing.Size(336, 38);
-            this.button_bucket_install_official.TabIndex = 11;
-            this.button_bucket_install_official.Text = "【Proxy】添加Official常见buckets";
-            this.button_bucket_install_official.UseVisualStyleBackColor = true;
-            this.button_bucket_install_official.Click += new System.EventHandler(this.button_bucket_install_official_Click);
-            // 
-            // checkedListBox_app_list
-            // 
-            this.checkedListBox_app_list.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkedListBox_app_list.FormattingEnabled = true;
-            this.checkedListBox_app_list.Location = new System.Drawing.Point(3, 3);
-            this.checkedListBox_app_list.Name = "checkedListBox_app_list";
-            this.checkedListBox_app_list.Size = new System.Drawing.Size(542, 354);
-            this.checkedListBox_app_list.TabIndex = 0;
-            // 
-            // button_app_list
-            // 
-            this.button_app_list.Location = new System.Drawing.Point(593, 14);
-            this.button_app_list.Name = "button_app_list";
-            this.button_app_list.Size = new System.Drawing.Size(126, 41);
-            this.button_app_list.TabIndex = 1;
-            this.button_app_list.Text = "刷新列表";
-            this.button_app_list.UseVisualStyleBackColor = true;
-            this.button_app_list.Click += new System.EventHandler(this.button_app_list_Click);
-            // 
-            // button_app_bucket_update
-            // 
-            this.button_app_bucket_update.Location = new System.Drawing.Point(593, 66);
-            this.button_app_bucket_update.Name = "button_app_bucket_update";
-            this.button_app_bucket_update.Size = new System.Drawing.Size(126, 41);
-            this.button_app_bucket_update.TabIndex = 1;
-            this.button_app_bucket_update.Text = "更新buckets";
-            this.button_app_bucket_update.UseVisualStyleBackColor = true;
-            this.button_app_bucket_update.Click += new System.EventHandler(this.button_app_bucket_update_Click);
-            // 
-            // button_app_bucket
-            // 
-            this.button_app_bucket.Location = new System.Drawing.Point(593, 302);
-            this.button_app_bucket.Name = "button_app_bucket";
-            this.button_app_bucket.Size = new System.Drawing.Size(126, 41);
-            this.button_app_bucket.TabIndex = 1;
-            this.button_app_bucket.Text = "修改bucket";
-            this.button_app_bucket.UseVisualStyleBackColor = true;
-            // 
-            // button_app_update
-            // 
-            this.button_app_update.Location = new System.Drawing.Point(593, 117);
-            this.button_app_update.Name = "button_app_update";
-            this.button_app_update.Size = new System.Drawing.Size(126, 41);
-            this.button_app_update.TabIndex = 1;
-            this.button_app_update.Text = "更新软件";
-            this.button_app_update.UseVisualStyleBackColor = true;
-            this.button_app_update.Click += new System.EventHandler(this.button_app_update_Click);
-            // 
-            // tabPage_search
-            // 
-            this.tabPage_search.Controls.Add(this.textBox_search_json);
-            this.tabPage_search.Controls.Add(this.textBox_search_bucket);
-            this.tabPage_search.Controls.Add(this.button_search_install_proxy);
-            this.tabPage_search.Controls.Add(this.button_search_install);
-            this.tabPage_search.Controls.Add(this.label8);
-            this.tabPage_search.Controls.Add(this.radioButton_ss_ss);
-            this.tabPage_search.Controls.Add(this.radioButton_ss_go);
-            this.tabPage_search.Controls.Add(this.radioButton_ss_soft);
-            this.tabPage_search.Controls.Add(this.radioButton_ss_old);
-            this.tabPage_search.Controls.Add(this.button_search);
-            this.tabPage_search.Controls.Add(this.label9);
-            this.tabPage_search.Controls.Add(this.label7);
-            this.tabPage_search.Controls.Add(this.textBox_search);
-            this.tabPage_search.Location = new System.Drawing.Point(4, 33);
-            this.tabPage_search.Name = "tabPage_search";
-            this.tabPage_search.Size = new System.Drawing.Size(770, 363);
-            this.tabPage_search.TabIndex = 5;
-            this.tabPage_search.Text = "5. Search";
-            this.tabPage_search.UseVisualStyleBackColor = true;
-            // 
-            // button_app_uninstall
-            // 
-            this.button_app_uninstall.Location = new System.Drawing.Point(593, 244);
-            this.button_app_uninstall.Name = "button_app_uninstall";
-            this.button_app_uninstall.Size = new System.Drawing.Size(126, 41);
-            this.button_app_uninstall.TabIndex = 1;
-            this.button_app_uninstall.Text = "卸载软件";
-            this.button_app_uninstall.UseVisualStyleBackColor = true;
-            this.button_app_uninstall.Click += new System.EventHandler(this.button_app_uninstall_Click);
-            // 
-            // textBox_search
-            // 
-            this.textBox_search.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox_search.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.textBox_search.Location = new System.Drawing.Point(130, 19);
-            this.textBox_search.Name = "textBox_search";
-            this.textBox_search.Size = new System.Drawing.Size(377, 43);
-            this.textBox_search.TabIndex = 0;
-            this.textBox_search.Text = "scoop-search";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(24, 28);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(102, 25);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "查找的软件";
-            // 
-            // button_search
-            // 
-            this.button_search.Location = new System.Drawing.Point(513, 19);
-            this.button_search.Name = "button_search";
-            this.button_search.Size = new System.Drawing.Size(95, 43);
-            this.button_search.TabIndex = 2;
-            this.button_search.Text = "搜索";
-            this.button_search.UseVisualStyleBackColor = true;
-            this.button_search.Click += new System.EventHandler(this.button_search_Click);
-            // 
-            // radioButton_ss_old
-            // 
-            this.radioButton_ss_old.AutoSize = true;
-            this.radioButton_ss_old.Location = new System.Drawing.Point(531, 68);
-            this.radioButton_ss_old.Name = "radioButton_ss_old";
-            this.radioButton_ss_old.Size = new System.Drawing.Size(137, 28);
-            this.radioButton_ss_old.TabIndex = 3;
-            this.radioButton_ss_old.Text = "原生搜索(慢)";
-            this.radioButton_ss_old.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_ss_go
-            // 
-            this.radioButton_ss_go.AutoSize = true;
-            this.radioButton_ss_go.Location = new System.Drawing.Point(212, 68);
-            this.radioButton_ss_go.Name = "radioButton_ss_go";
-            this.radioButton_ss_go.Size = new System.Drawing.Size(149, 28);
-            this.radioButton_ss_go.TabIndex = 3;
-            this.radioButton_ss_go.Text = "scoop-search";
-            this.radioButton_ss_go.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_ss_ss
-            // 
-            this.radioButton_ss_ss.AutoSize = true;
-            this.radioButton_ss_ss.Location = new System.Drawing.Point(367, 68);
-            this.radioButton_ss_ss.Name = "radioButton_ss_ss";
-            this.radioButton_ss_ss.Size = new System.Drawing.Size(158, 28);
-            this.radioButton_ss_ss.TabIndex = 3;
-            this.radioButton_ss_ss.Text = "ss (基于数据库)";
-            this.radioButton_ss_ss.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.Navy;
-            this.label8.Location = new System.Drawing.Point(23, 192);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(723, 144);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "几种搜索方式的区别：\r\n\r\n1. 原生搜索，速度慢，展示信息详细。\r\n2. scoop-search, 第三方golang编写，搜索本地bucket得到数据，速度" +
-    "快。【需要安装】\r\n3. ss, 第三方软件信息仓库，包含了本地bucket和网上记录的常用软件。【需要安装】\r\n4. 软件自身方案。【推荐】【支持Proxy安" +
-    "装功能】";
-            // 
-            // button_search_install
-            // 
-            this.button_search_install.ForeColor = System.Drawing.Color.Blue;
-            this.button_search_install.Location = new System.Drawing.Point(627, 19);
-            this.button_search_install.Name = "button_search_install";
-            this.button_search_install.Size = new System.Drawing.Size(102, 43);
-            this.button_search_install.TabIndex = 5;
-            this.button_search_install.Text = "安装";
-            this.toolTip1.SetToolTip(this.button_search_install, "原生方式安装软件");
-            this.button_search_install.UseVisualStyleBackColor = true;
-            this.button_search_install.Click += new System.EventHandler(this.button_search_install_Click);
-            // 
-            // button_search_install_proxy
-            // 
-            this.button_search_install_proxy.ForeColor = System.Drawing.Color.Red;
-            this.button_search_install_proxy.Location = new System.Drawing.Point(513, 122);
-            this.button_search_install_proxy.Name = "button_search_install_proxy";
-            this.button_search_install_proxy.Size = new System.Drawing.Size(180, 42);
-            this.button_search_install_proxy.TabIndex = 6;
-            this.button_search_install_proxy.Text = "【Proxy】安装";
-            this.toolTip1.SetToolTip(this.button_search_install_proxy, "通过Proxy下载安装软件!\r\n此方案必须配合软件自身app查找功能使用！");
-            this.button_search_install_proxy.UseVisualStyleBackColor = true;
-            this.button_search_install_proxy.Click += new System.EventHandler(this.button_search_install_proxy_Click);
-            // 
-            // textBox_search_bucket
-            // 
-            this.textBox_search_bucket.Location = new System.Drawing.Point(132, 129);
-            this.textBox_search_bucket.Name = "textBox_search_bucket";
-            this.textBox_search_bucket.ReadOnly = true;
-            this.textBox_search_bucket.Size = new System.Drawing.Size(121, 30);
-            this.textBox_search_bucket.TabIndex = 7;
-            // 
-            // textBox_search_json
-            // 
-            this.textBox_search_json.Location = new System.Drawing.Point(270, 129);
-            this.textBox_search_json.Name = "textBox_search_json";
-            this.textBox_search_json.ReadOnly = true;
-            this.textBox_search_json.Size = new System.Drawing.Size(215, 30);
-            this.textBox_search_json.TabIndex = 7;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(8, 132);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(119, 25);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "bucket info:";
-            // 
-            // radioButton_ss_soft
-            // 
-            this.radioButton_ss_soft.AutoSize = true;
-            this.radioButton_ss_soft.Checked = true;
-            this.radioButton_ss_soft.Location = new System.Drawing.Point(102, 68);
-            this.radioButton_ss_soft.Name = "radioButton_ss_soft";
-            this.radioButton_ss_soft.Size = new System.Drawing.Size(107, 28);
-            this.radioButton_ss_soft.TabIndex = 3;
-            this.radioButton_ss_soft.TabStop = true;
-            this.radioButton_ss_soft.Text = "软件搜索";
-            this.radioButton_ss_soft.UseVisualStyleBackColor = true;
+            this.textBox_app_bucket_new.BackColor = System.Drawing.Color.White;
+            this.textBox_app_bucket_new.ForeColor = System.Drawing.Color.Red;
+            this.textBox_app_bucket_new.Location = new System.Drawing.Point(585, 262);
+            this.textBox_app_bucket_new.Name = "textBox_app_bucket_new";
+            this.textBox_app_bucket_new.Size = new System.Drawing.Size(148, 30);
+            this.textBox_app_bucket_new.TabIndex = 2;
+            this.textBox_app_bucket_new.Text = "main";
+            this.textBox_app_bucket_new.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.textBox_app_bucket_new, "App要修改的目标 bucket");
             // 
             // FormMain
             // 
@@ -790,9 +811,10 @@ namespace ScoopTools
             this.tabPage_buckets.ResumeLayout(false);
             this.tabPage_buckets.PerformLayout();
             this.tabPage_apps.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.tabPage_apps.PerformLayout();
             this.tabPage_search.ResumeLayout(false);
             this.tabPage_search.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -862,6 +884,7 @@ namespace ScoopTools
         private System.Windows.Forms.TextBox textBox_search_bucket;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RadioButton radioButton_ss_soft;
+        private System.Windows.Forms.TextBox textBox_app_bucket_new;
     }
 }
 
