@@ -33,11 +33,11 @@ namespace ScoopTools
                 var line = lines[i];
                 if (line.Length == 0)
                 {
+                    i += 1;
                     if (content_end == false)
                     {
                         break; // parse content end
                     }
-                    i += 1;
                     content_end = true;
                     continue;
                 }
@@ -56,13 +56,15 @@ namespace ScoopTools
                     continue;
                 }
                 // parse content
-                var vals = new List<string>();
-                for (var j = 0; j < offsets.Count - 1; j++)
-                {
-                    var val = line.Substring(offsets[j], offsets[j + 1] - offsets[j]).Trim();
-                    vals.Add(val);
+                if (offsets.Count > 0) { 
+                    var vals = new List<string>();
+                    for (var j = 0; j < offsets.Count - 1; j++)
+                    {
+                        var val = line.Substring(offsets[j], offsets[j + 1] - offsets[j]).Trim();
+                        vals.Add(val);
+                    }
+                    respList.valueList.Add(vals.ToArray());
                 }
-                respList.valueList.Add(vals.ToArray());
                 i += 1;
             }
             return respList;
@@ -99,7 +101,6 @@ namespace ScoopTools
             var bucketPath = Path.Combine(scoop_root, SCOOP_DIR_BUCKET, bucket);
             var cmd = $"&{{ cd {bucketPath}; git remote set-url origin {url}; git remote -v }}";
             var output = runPowershellCmd(cmd);
-            output = output.Replace("\n", "\r\n");
             return output;
         }
         // 添加常见bucket
@@ -121,13 +122,76 @@ namespace ScoopTools
             }
             // cmd
             var cmd = "&{ ";
+            
             foreach (var key in buckets.Keys)
             {
+                cmd += $"scoop bucket rm {key} ;";
                 cmd += $"scoop bucket add {key} {buckets[key]} ;";
             }
             cmd += "}";
             var output = runPowershellCmd(cmd);
-            output = output.Replace("\n", "\r\n");
+            return output;
+        }
+
+        public string getScoopRootPath()
+        {
+            var root = getEnvValue(SCOOP_ENV_ROOT);
+            if(root == null)
+            {
+                root = Path.Combine(getEnvValue("USERPROFILE"), "scoop");
+            }
+            return root;
+        }
+
+        // 本地构建最简单的bucket,下载git
+        public async Task<string> installGitLocal(string proxy)
+        {
+            // https://github.com/xuchaoxin1375/scoop-cn/blob/master/Deploy-ScoopForCNUser/Deploy-ScoopForCNUser.md
+            // 创建 tmp bucket, 然后手动下载 git 和 7z json 文件，替换下载地址
+            var bucketDir = getScoopRootPath();
+            bucketDir = Path.Combine(bucketDir, "buckets/tmp");
+            // $env:USERPROFILE\scoop\buckets\tmp
+            var gitFiles = new string[][]{
+                new string[]{ "bucket/git.json", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/git.json" },
+                new string[]{ "scripts/git/install-context.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/git/install-context.reg" },
+                new string[]{ "scripts/git/uninstall-context.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/git/uninstall-context.reg" },
+                new string[]{ "scripts/git/install-file-associations.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/git/install-file-associations.reg" },
+                new string[]{ "scripts/git/uninstall-file-associations.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/git/uninstall-file-associations.reg" },
+                
+                new string[]{ "bucket/7zip.json", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/7zip.json" },
+                new string[]{ "scripts/7-zip/install-context.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/7-zip/install-context.reg" },
+                new string[]{ "scripts/7-zip/uninstall-context.reg", "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/7-zip/uninstall-context.reg" },
+            };
+            // 创建文件夹
+            Directory.CreateDirectory(Path.Combine(bucketDir, "bucket"));
+            Directory.CreateDirectory(Path.Combine(bucketDir, "scripts"));
+            Directory.CreateDirectory(Path.Combine(bucketDir, "scripts/7-zip"));
+            Directory.CreateDirectory(Path.Combine(bucketDir, "scripts/git"));
+            // 下载文件
+            foreach (var f in gitFiles)
+            {
+                var path = Path.Combine(bucketDir, f[0]);
+                var url = f[1];
+                if(proxy!=null && proxy.Length > 0)
+                {
+                    url = $"{proxy}/{url}";
+                }
+                var content = await HttpGet(url);
+                if(content == null)
+                {
+                    return "文件下载失败："+url+"\r\n建议手动检查一下网络问题。";
+                }
+                if (proxy != null && proxy.Length > 0 && f[0].EndsWith(".json"))
+                {
+                    content = content.Replace("$bucketsdir\\\\main\\\\scripts", "$bucketsdir\\\\tmp\\\\scripts");
+                    content = content.Replace("\"https://github.com", $"\"{proxy}/https://github.com");
+                    content = content.Replace("\"https://raw.githubusercontent.com", $"\"{proxy}/https://raw.githubusercontent.com");
+                }
+                File.WriteAllText(path, content);
+            }
+            // 安装 git 7z
+            var cmd = "&{scoop install tmp/7zip; scoop install tmp/git; }";
+            var output = runPowershellCmd(cmd);
             return output;
         }
         // powershell control
@@ -154,6 +218,7 @@ namespace ScoopTools
 
                     // 读取标准输出
                     output = process.StandardOutput.ReadToEnd();
+                    output = output.Replace("\r\n", "\n").Replace("\n", "\r\n");
                     // 读取错误输出
                     string error = process.StandardError.ReadToEnd();
 
@@ -212,7 +277,7 @@ namespace ScoopTools
                     return await response.Content.ReadAsStringAsync();
                 }
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 Console.WriteLine($"HTTP 请求出错: {e.Message}");
             }
