@@ -30,6 +30,7 @@ namespace ScoopTools
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage_index = new System.Windows.Forms.TabPage();
             this.textBox_readme = new System.Windows.Forms.TextBox();
@@ -67,6 +68,7 @@ namespace ScoopTools
             this.button_bucket_list = new System.Windows.Forms.Button();
             this.button_bucket_official = new System.Windows.Forms.Button();
             this.tabPage_apps = new System.Windows.Forms.TabPage();
+            this.textBox_app_bucket_new = new System.Windows.Forms.TextBox();
             this.button_app_uninstall = new System.Windows.Forms.Button();
             this.button_app_bucket = new System.Windows.Forms.Button();
             this.button_app_bucket_update = new System.Windows.Forms.Button();
@@ -92,7 +94,6 @@ namespace ScoopTools
             this.button_log_clear = new System.Windows.Forms.Button();
             this.textBox_log = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBox_app_bucket_new = new System.Windows.Forms.TextBox();
             this.tabMain.SuspendLayout();
             this.tabPage_index.SuspendLayout();
             this.tabPage_proxy.SuspendLayout();
@@ -511,12 +512,24 @@ namespace ScoopTools
             this.tabPage_apps.Controls.Add(this.button_app_update);
             this.tabPage_apps.Controls.Add(this.button_app_list);
             this.tabPage_apps.Controls.Add(this.checkedListBox_app_list);
-            this.tabPage_apps.Location = new System.Drawing.Point(4, 33);
+            this.tabPage_apps.Location = new System.Drawing.Point(4, 28);
             this.tabPage_apps.Name = "tabPage_apps";
-            this.tabPage_apps.Size = new System.Drawing.Size(770, 363);
+            this.tabPage_apps.Size = new System.Drawing.Size(770, 368);
             this.tabPage_apps.TabIndex = 4;
             this.tabPage_apps.Text = "4. Apps";
             this.tabPage_apps.UseVisualStyleBackColor = true;
+            // 
+            // textBox_app_bucket_new
+            // 
+            this.textBox_app_bucket_new.BackColor = System.Drawing.Color.White;
+            this.textBox_app_bucket_new.ForeColor = System.Drawing.Color.Red;
+            this.textBox_app_bucket_new.Location = new System.Drawing.Point(585, 262);
+            this.textBox_app_bucket_new.Name = "textBox_app_bucket_new";
+            this.textBox_app_bucket_new.Size = new System.Drawing.Size(148, 30);
+            this.textBox_app_bucket_new.TabIndex = 2;
+            this.textBox_app_bucket_new.Text = "main";
+            this.textBox_app_bucket_new.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.textBox_app_bucket_new, "App要修改的目标 bucket");
             // 
             // button_app_uninstall
             // 
@@ -577,7 +590,7 @@ namespace ScoopTools
             this.checkedListBox_app_list.FormattingEnabled = true;
             this.checkedListBox_app_list.Location = new System.Drawing.Point(3, 3);
             this.checkedListBox_app_list.Name = "checkedListBox_app_list";
-            this.checkedListBox_app_list.Size = new System.Drawing.Size(542, 354);
+            this.checkedListBox_app_list.Size = new System.Drawing.Size(542, 349);
             this.checkedListBox_app_list.TabIndex = 0;
             // 
             // tabPage_search
@@ -779,18 +792,6 @@ namespace ScoopTools
             this.textBox_log.Size = new System.Drawing.Size(778, 314);
             this.textBox_log.TabIndex = 4;
             // 
-            // textBox_app_bucket_new
-            // 
-            this.textBox_app_bucket_new.BackColor = System.Drawing.Color.White;
-            this.textBox_app_bucket_new.ForeColor = System.Drawing.Color.Red;
-            this.textBox_app_bucket_new.Location = new System.Drawing.Point(585, 262);
-            this.textBox_app_bucket_new.Name = "textBox_app_bucket_new";
-            this.textBox_app_bucket_new.Size = new System.Drawing.Size(148, 30);
-            this.textBox_app_bucket_new.TabIndex = 2;
-            this.textBox_app_bucket_new.Text = "main";
-            this.textBox_app_bucket_new.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip1.SetToolTip(this.textBox_app_bucket_new, "App要修改的目标 bucket");
-            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -799,6 +800,7 @@ namespace ScoopTools
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "Scoop管理工具";
             this.Load += new System.EventHandler(this.FormMain_Load);

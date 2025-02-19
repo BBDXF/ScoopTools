@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ScoopTools")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Scoop China 区域使用辅助工具，包含Proxy和维护bucket和App的常用小功能。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("BBDXF")]
 [assembly: AssemblyProduct("ScoopTools")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
