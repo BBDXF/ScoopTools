@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
+
 
 namespace ScoopTools
 {
@@ -70,41 +72,48 @@ namespace ScoopTools
             return respList;
         }
     }
+
     public class ScoopAcions
     {
-        public string Scoop_root; // D:\scoop\root
-        public readonly string SCOOP_PWSH_AUTH = "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser";
+        public const int HWND_BROADCAST = 0xFFFF;
+        public const int WM_SETTINGCHANGE = 0x001A;
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, string lParam);
+
         public readonly string SCOOP_ENV_ROOT = "SCOOP";
         public readonly string SCOOP_ENV_GLOBAL = "SCOOP_GLOBAL";
         public readonly string SCOOP_REPO = "https://github.com/ScoopInstaller/Scoop";
         public readonly string SCOOP_DIR_APP = "apps";
         public readonly string SCOOP_DIR_BUCKET = "buckets";
 
-        // 处理powershell应答的标记
-        private ScoopCmdType _pwsh_cmd_type = ScoopCmdType.NONE;
-
+        public delegate void D_UiLog(string txt);
+        public D_UiLog cb_log;
 
         // 获取环境变量的值
         public string getEnvValue(string key)
         {
-            return Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User);
+            return Environment.GetEnvironmentVariable(key);
         }
         // 添加环境变量
         public void setEnvValue(string key, string val)
         {
             Environment.SetEnvironmentVariable(key, val, EnvironmentVariableTarget.User);
         }
+        // 通知OS env修改了
+        public void NotifyOSEnvChanged()
+        {
+            SendMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, "Environment");
+        }
         // 修改 bucket url
-        public string bucketModifyUrl(string bucket, string url)
+        public void bucketModifyUrl(string bucket, string url)
         {
             var scoop_root = getEnvValue(SCOOP_ENV_ROOT);
             var bucketPath = Path.Combine(scoop_root, SCOOP_DIR_BUCKET, bucket);
-            var cmd = $"&{{ cd {bucketPath}; git remote set-url origin {url}; git remote -v }}";
-            var output = runPowershellCmd(cmd);
-            return output;
+            var cmd = $"&{{ cd {bucketPath};  git checkout .; git remote set-url origin {url}; git remote -v; }}";
+            runPowershellCmdCB(cmd);
         }
         // 添加常见bucket
-        public string bucketAddOfficial(string proxy)
+        public void bucketAddOfficial(string proxy)
         {
             var buckets = new Dictionary<string, string>();
             buckets["main"] = "https://github.com/ScoopInstaller/Main";
@@ -131,8 +140,7 @@ namespace ScoopTools
                 cmd += $"scoop bucket add {key} {buckets[key]} ;";
             }
             cmd += "}";
-            var output = runPowershellCmd(cmd);
-            return output;
+            runPowershellCmdCB(cmd);
         }
 
         public string getScoopRootPath()
@@ -146,7 +154,7 @@ namespace ScoopTools
         }
 
         // 本地构建最简单的bucket,下载git
-        public async Task<string> installGitLocal(string proxy)
+        public async void installGitLocal(string proxy)
         {
             // https://github.com/xuchaoxin1375/scoop-cn/blob/master/Deploy-ScoopForCNUser/Deploy-ScoopForCNUser.md
             // 创建 tmp bucket, 然后手动下载 git 和 7z json 文件，替换下载地址
@@ -181,7 +189,8 @@ namespace ScoopTools
                 var content = await HttpGet(url);
                 if(content == null)
                 {
-                    return "文件下载失败："+url+"\r\n建议手动检查一下网络问题。";
+                    cb_log( "文件下载失败："+url+"\r\n建议手动检查一下网络问题。\r\n");
+                    return;
                 }
                 if (proxy != null && proxy.Length > 0 && f[0].EndsWith(".json"))
                 {
@@ -193,14 +202,60 @@ namespace ScoopTools
             }
             // 安装 git 7z
             var cmd = "&{scoop install tmp/7zip; scoop install tmp/git; }";
-            var output = runPowershellCmd(cmd);
-            return output;
+            runPowershellCmdCB(cmd);
         }
         // powershell control
+        private void _pwsh_cb(object sender, DataReceivedEventArgs e)
+        {
+            var output = e.Data;
+            if(output != null)
+            {
+                cb_log(output+"\r\n");
+            }
+        }
+        //private void _pwsh_cb_exit(object sender, EventArgs e)
+        //{
+        //    var output = e.ToString();
+        //    //output = output.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        //    cb_log("Exit: "+output);
+        //}
         // 启动一个powershell进程，然后捕获output
+        public void runPowershellCmdCB(string cmd)
+        {
+            cb_log($"[cmd cb] Run `{cmd}` ...\r\n");
+            using (Process process = new Process())
+            {
+                process.StartInfo = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-NoProfile -Command \"{cmd}\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
+                //process.EnableRaisingEvents = true;
+                process.OutputDataReceived += _pwsh_cb;
+                process.ErrorDataReceived += _pwsh_cb;
+                //process.Exited += _pwsh_cb_exit;
+                try
+                {
+                    // 启动进程
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+                }
+                catch (Exception )
+                {
+                }
+                cb_log($"[cmd cb] Done.\r\n\r\n");
+            }
+        }
         public string runPowershellCmd(string cmd)
         {
-            string output = null;
+            string output = "";
+            cb_log($"[cmd] Run `{cmd}` ...\r\n");
             using (Process process = new Process())
             {
                 process.StartInfo = new ProcessStartInfo
@@ -217,34 +272,19 @@ namespace ScoopTools
                 {
                     // 启动进程
                     process.Start();
-
-                    // 读取标准输出
                     output = process.StandardOutput.ReadToEnd();
                     output = output.Replace("\r\n", "\n").Replace("\n", "\r\n");
-                    // 读取错误输出
-                    string error = process.StandardError.ReadToEnd();
-
-                    // 等待进程结束
                     process.WaitForExit();
-
-                    // 检查是否有错误信息
-                    if (!string.IsNullOrEmpty(error))
-                    {
-                        output += $"\r\n{error}\r\n";
-                    }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
-                    // 处理异常
-                    //output = $"发生异常: {ex.Message}";
-                    output = null;
                 }
+                cb_log($"[cmd] Done.\r\n\r\n");
             }
             return output;
         }
         public ScoopResponseValue runScoopCmd(ScoopCmdType cmd, string arg="")
         {
-            _pwsh_cmd_type = cmd;
             ScoopResponseValue retVal = null;
             switch (cmd)
             {
@@ -278,9 +318,8 @@ namespace ScoopTools
                     return await response.Content.ReadAsStringAsync();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine($"HTTP 请求出错: {e.Message}");
             }
             return null;
         }
