@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ScoopTools")]
-[assembly: AssemblyDescription("Scoop China 区域使用辅助工具，包含Proxy和维护bucket和App的常用小功能。")]
+[assembly: AssemblyDescription("Scoop China 使用辅助工具，包含Proxy和维护bucket和App的常用小功能。没有翻墙软件也可以安装和使用scoop.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BBDXF")]
 [assembly: AssemblyProduct("ScoopTools")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]

@@ -75,10 +75,11 @@ namespace ScoopTools
 
     public class ScoopAcions
     {
-        public const int HWND_BROADCAST = 0xFFFF;
-        public const int WM_SETTINGCHANGE = 0x001A;
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, string lParam);
+        private const int HWND_BROADCAST = 0xFFFF;
+        private const int WM_SETTINGCHANGE = 0x001A;
+        private const uint SMTO_ABORTIFHUNG = 0x0002;
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, string lParam, uint fuFlags, uint uTimeout, out IntPtr lpdwResult);
 
         public readonly string SCOOP_ENV_ROOT = "SCOOP";
         public readonly string SCOOP_ENV_GLOBAL = "SCOOP_GLOBAL";
@@ -102,7 +103,8 @@ namespace ScoopTools
         // 通知OS env修改了
         public void NotifyOSEnvChanged()
         {
-            SendMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, "Environment");
+            IntPtr result;
+            SendMessageTimeout((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SMTO_ABORTIFHUNG, 2000, out result);
         }
         // 修改 bucket url
         public void bucketModifyUrl(string bucket, string url)
