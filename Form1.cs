@@ -841,6 +841,42 @@ namespace ScoopTools
             });
         }
 
+        private async void button_search_update_proxy_Click(object sender, EventArgs e)
+        {
+            // 基于程序自己的搜索功能，查找到对应的bucket + json
+            // 修改 json文件中的url地址，支持install行为
+            // 基于git revert 指令还原仓库的修改
+            var bucket = textBox_search_bucket.Text;
+            var json = textBox_search_json.Text;
+            if (bucket.Length == 0)
+            {
+                MessageBox.Show("请使用软件搜索功能查找到对应bucket和json文件后，再使用此功能!");
+                return;
+            }
+            var proxy = textBox_proxy_url.Text;
+            if (proxy.Length == 0 || !proxy.StartsWith("http"))
+            {
+                MessageBox.Show("请设置一个有效的Proxy地址！\r\n【提示：】可以使用获取Github Proxy自动查找可用Proxy地址！", "参数错误");
+                return;
+            }
+            Log($"\r\n检查下载url，添加Proxy ...\r\n");
+            var file = Path.Combine(scoopActions.getScoopRootPath(), "buckets", bucket, "bucket", json);
+            var content = File.ReadAllText(file);
+            var content2 = appJsonModifyProxy(content, proxy);
+            File.WriteAllText(file, content2);
 
+            // install
+            var cmd = $"scoop download {bucket}/{Path.GetFileNameWithoutExtension(json)}";
+            Log($"Url修改完成，开始执行升级 {cmd} ...\r\n");
+            await Task.Run(() =>
+            {
+                scoopActions.runPowershellCmdCB(cmd);
+            });
+
+            // revert
+            Log("开始恢复本地 bucket app json 文件 ...\r\n");
+            File.WriteAllText(file, content);
+            Log("Done.\r\n");
+        }
     }
 }

@@ -41,6 +41,7 @@ namespace ScoopTools
             this.button_proxy_get = new System.Windows.Forms.Button();
             this.button_proxy_check_best = new System.Windows.Forms.Button();
             this.tabPage_install = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
             this.button_config_proxy_en = new System.Windows.Forms.Button();
             this.button_config_proxy_dis = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
@@ -57,6 +58,7 @@ namespace ScoopTools
             this.button_install_official_proxy = new System.Windows.Forms.Button();
             this.button_install_official = new System.Windows.Forms.Button();
             this.tabPage_buckets = new System.Windows.Forms.TabPage();
+            this.button_bucket_fix = new System.Windows.Forms.Button();
             this.button_bucket_install_official = new System.Windows.Forms.Button();
             this.textBox_bucket_update = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -82,6 +84,8 @@ namespace ScoopTools
             this.button_app_list = new System.Windows.Forms.Button();
             this.checkedListBox_app_list = new System.Windows.Forms.CheckedListBox();
             this.tabPage_search = new System.Windows.Forms.TabPage();
+            this.button_search_update_proxy = new System.Windows.Forms.Button();
+            this.button_ss_install_no_proxy = new System.Windows.Forms.Button();
             this.textBox_search_json = new System.Windows.Forms.TextBox();
             this.textBox_search_bucket = new System.Windows.Forms.TextBox();
             this.button_search_install_proxy = new System.Windows.Forms.Button();
@@ -99,9 +103,6 @@ namespace ScoopTools
             this.button_log_clear = new System.Windows.Forms.Button();
             this.textBox_log = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button_ss_install_no_proxy = new System.Windows.Forms.Button();
-            this.button_bucket_fix = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.tabPage_index.SuspendLayout();
             this.tabPage_proxy.SuspendLayout();
@@ -157,10 +158,10 @@ namespace ScoopTools
             this.tabPage_proxy.Controls.Add(this.textBox_proxy_url);
             this.tabPage_proxy.Controls.Add(this.button_proxy_get);
             this.tabPage_proxy.Controls.Add(this.button_proxy_check_best);
-            this.tabPage_proxy.Location = new System.Drawing.Point(4, 26);
+            this.tabPage_proxy.Location = new System.Drawing.Point(4, 22);
             this.tabPage_proxy.Name = "tabPage_proxy";
             this.tabPage_proxy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_proxy.Size = new System.Drawing.Size(770, 370);
+            this.tabPage_proxy.Size = new System.Drawing.Size(770, 374);
             this.tabPage_proxy.TabIndex = 1;
             this.tabPage_proxy.Text = "1. 代理";
             this.tabPage_proxy.UseVisualStyleBackColor = true;
@@ -235,12 +236,23 @@ namespace ScoopTools
             this.tabPage_install.Controls.Add(this.button_install_pre);
             this.tabPage_install.Controls.Add(this.button_install_official_proxy);
             this.tabPage_install.Controls.Add(this.button_install_official);
-            this.tabPage_install.Location = new System.Drawing.Point(4, 26);
+            this.tabPage_install.Location = new System.Drawing.Point(4, 22);
             this.tabPage_install.Name = "tabPage_install";
-            this.tabPage_install.Size = new System.Drawing.Size(770, 370);
+            this.tabPage_install.Size = new System.Drawing.Size(770, 374);
             this.tabPage_install.TabIndex = 2;
             this.tabPage_install.Text = "2. 安装";
             this.tabPage_install.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.label12.Location = new System.Drawing.Point(61, 178);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(304, 51);
+            this.label12.TabIndex = 14;
+            this.label12.Text = "可以使用 main bucket 直接安装git 7z！\r\n方法：使用 search 页面搜索，然后 proxy 安装！\r\n如果 main 不可用，使用这里【修复" +
+    "】功能安装git 7z！";
             // 
             // button_config_proxy_en
             // 
@@ -424,12 +436,23 @@ namespace ScoopTools
             this.tabPage_buckets.Controls.Add(this.button_bucket_del);
             this.tabPage_buckets.Controls.Add(this.button_bucket_list);
             this.tabPage_buckets.Controls.Add(this.button_bucket_official);
-            this.tabPage_buckets.Location = new System.Drawing.Point(4, 26);
+            this.tabPage_buckets.Location = new System.Drawing.Point(4, 22);
             this.tabPage_buckets.Name = "tabPage_buckets";
-            this.tabPage_buckets.Size = new System.Drawing.Size(770, 370);
+            this.tabPage_buckets.Size = new System.Drawing.Size(770, 374);
             this.tabPage_buckets.TabIndex = 3;
             this.tabPage_buckets.Text = "3. Buckets";
             this.tabPage_buckets.UseVisualStyleBackColor = true;
+            // 
+            // button_bucket_fix
+            // 
+            this.button_bucket_fix.Location = new System.Drawing.Point(386, 216);
+            this.button_bucket_fix.Name = "button_bucket_fix";
+            this.button_bucket_fix.Size = new System.Drawing.Size(186, 38);
+            this.button_bucket_fix.TabIndex = 12;
+            this.button_bucket_fix.Text = "还原/修复 bucket中的问题";
+            this.toolTip1.SetToolTip(this.button_bucket_fix, "使用git相关命令，尝试还原改动，防止无法update");
+            this.button_bucket_fix.UseVisualStyleBackColor = true;
+            this.button_bucket_fix.Click += new System.EventHandler(this.button_bucket_fix_Click);
             // 
             // button_bucket_install_official
             // 
@@ -591,9 +614,9 @@ namespace ScoopTools
             this.tabPage_apps.Controls.Add(this.button_app_update);
             this.tabPage_apps.Controls.Add(this.button_app_list);
             this.tabPage_apps.Controls.Add(this.checkedListBox_app_list);
-            this.tabPage_apps.Location = new System.Drawing.Point(4, 26);
+            this.tabPage_apps.Location = new System.Drawing.Point(4, 22);
             this.tabPage_apps.Name = "tabPage_apps";
-            this.tabPage_apps.Size = new System.Drawing.Size(770, 370);
+            this.tabPage_apps.Size = new System.Drawing.Size(770, 374);
             this.tabPage_apps.TabIndex = 4;
             this.tabPage_apps.Text = "4. Apps";
             this.tabPage_apps.UseVisualStyleBackColor = true;
@@ -674,6 +697,7 @@ namespace ScoopTools
             // 
             // tabPage_search
             // 
+            this.tabPage_search.Controls.Add(this.button_search_update_proxy);
             this.tabPage_search.Controls.Add(this.button_ss_install_no_proxy);
             this.tabPage_search.Controls.Add(this.textBox_search_json);
             this.tabPage_search.Controls.Add(this.textBox_search_bucket);
@@ -693,6 +717,30 @@ namespace ScoopTools
             this.tabPage_search.TabIndex = 5;
             this.tabPage_search.Text = "5. Search";
             this.tabPage_search.UseVisualStyleBackColor = true;
+            // 
+            // button_search_update_proxy
+            // 
+            this.button_search_update_proxy.ForeColor = System.Drawing.Color.Red;
+            this.button_search_update_proxy.Location = new System.Drawing.Point(489, 169);
+            this.button_search_update_proxy.Name = "button_search_update_proxy";
+            this.button_search_update_proxy.Size = new System.Drawing.Size(119, 42);
+            this.button_search_update_proxy.TabIndex = 9;
+            this.button_search_update_proxy.Text = "【Proxy】Down";
+            this.toolTip1.SetToolTip(this.button_search_update_proxy, "通过Proxy下载软件!\r\n然后，可以继续使用 update 或者 install 命令了");
+            this.button_search_update_proxy.UseVisualStyleBackColor = true;
+            this.button_search_update_proxy.Click += new System.EventHandler(this.button_search_update_proxy_Click);
+            // 
+            // button_ss_install_no_proxy
+            // 
+            this.button_ss_install_no_proxy.ForeColor = System.Drawing.Color.Red;
+            this.button_ss_install_no_proxy.Location = new System.Drawing.Point(627, 119);
+            this.button_ss_install_no_proxy.Name = "button_ss_install_no_proxy";
+            this.button_ss_install_no_proxy.Size = new System.Drawing.Size(99, 42);
+            this.button_ss_install_no_proxy.TabIndex = 8;
+            this.button_ss_install_no_proxy.Text = "【No Proxy】净化安装";
+            this.toolTip1.SetToolTip(this.button_ss_install_no_proxy, "去除 url 链接中的proxy部分，使用原生 github 链接下载安装");
+            this.button_ss_install_no_proxy.UseVisualStyleBackColor = true;
+            this.button_ss_install_no_proxy.Click += new System.EventHandler(this.button_ss_install_no_proxy_Click);
             // 
             // textBox_search_json
             // 
@@ -861,40 +909,6 @@ namespace ScoopTools
             this.textBox_log.Size = new System.Drawing.Size(778, 314);
             this.textBox_log.TabIndex = 4;
             // 
-            // button_ss_install_no_proxy
-            // 
-            this.button_ss_install_no_proxy.ForeColor = System.Drawing.Color.Red;
-            this.button_ss_install_no_proxy.Location = new System.Drawing.Point(627, 119);
-            this.button_ss_install_no_proxy.Name = "button_ss_install_no_proxy";
-            this.button_ss_install_no_proxy.Size = new System.Drawing.Size(99, 42);
-            this.button_ss_install_no_proxy.TabIndex = 8;
-            this.button_ss_install_no_proxy.Text = "【No Proxy】净化安装";
-            this.toolTip1.SetToolTip(this.button_ss_install_no_proxy, "去除 url 链接中的proxy部分，使用原生 github 链接下载安装");
-            this.button_ss_install_no_proxy.UseVisualStyleBackColor = true;
-            this.button_ss_install_no_proxy.Click += new System.EventHandler(this.button_ss_install_no_proxy_Click);
-            // 
-            // button_bucket_fix
-            // 
-            this.button_bucket_fix.Location = new System.Drawing.Point(386, 216);
-            this.button_bucket_fix.Name = "button_bucket_fix";
-            this.button_bucket_fix.Size = new System.Drawing.Size(186, 38);
-            this.button_bucket_fix.TabIndex = 12;
-            this.button_bucket_fix.Text = "还原/修复 bucket中的问题";
-            this.toolTip1.SetToolTip(this.button_bucket_fix, "使用git相关命令，尝试还原改动，防止无法update");
-            this.button_bucket_fix.UseVisualStyleBackColor = true;
-            this.button_bucket_fix.Click += new System.EventHandler(this.button_bucket_fix_Click);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label12.Location = new System.Drawing.Point(61, 178);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(304, 51);
-            this.label12.TabIndex = 14;
-            this.label12.Text = "可以使用 main bucket 直接安装git 7z！\r\n方法：使用 search 页面搜索，然后 proxy 安装！\r\n如果 main 不可用，使用这里【修复" +
-    "】功能安装git 7z！";
-            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -999,6 +1013,7 @@ namespace ScoopTools
         private System.Windows.Forms.Button button_ss_install_no_proxy;
         private System.Windows.Forms.Button button_bucket_fix;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button button_search_update_proxy;
     }
 }
 
