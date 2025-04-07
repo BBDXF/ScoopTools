@@ -378,6 +378,9 @@ namespace ScoopTools
 
                     var proxy = new GithubProxy();
                     proxy.url = url;
+                    proxy.ip = "";
+                    proxy.latency = 9999;
+                    proxy.server = "N/A";
                     list.Add(proxy);
                 }
                 else
