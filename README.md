@@ -33,5 +33,7 @@ C# WinForm 开发的GUI程序，为方便国内环境安装和维护scoop，buck
 	- 优化 UI 卡死问题
 - 2025/3/21
     - 增加download功能，可以配合install/update 使用
-
+- 2025/4/7
+	- 修复Github Proxy列表不可用问题。
+	
 > By BBDXF

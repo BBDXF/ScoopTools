@@ -103,6 +103,7 @@ namespace ScoopTools
             this.button_log_clear = new System.Windows.Forms.Button();
             this.textBox_log = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.button_proxy_get2 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabPage_index.SuspendLayout();
             this.tabPage_proxy.SuspendLayout();
@@ -156,12 +157,13 @@ namespace ScoopTools
             this.tabPage_proxy.Controls.Add(this.label10);
             this.tabPage_proxy.Controls.Add(this.label1);
             this.tabPage_proxy.Controls.Add(this.textBox_proxy_url);
+            this.tabPage_proxy.Controls.Add(this.button_proxy_get2);
             this.tabPage_proxy.Controls.Add(this.button_proxy_get);
             this.tabPage_proxy.Controls.Add(this.button_proxy_check_best);
-            this.tabPage_proxy.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_proxy.Location = new System.Drawing.Point(4, 26);
             this.tabPage_proxy.Name = "tabPage_proxy";
             this.tabPage_proxy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_proxy.Size = new System.Drawing.Size(770, 374);
+            this.tabPage_proxy.Size = new System.Drawing.Size(770, 370);
             this.tabPage_proxy.TabIndex = 1;
             this.tabPage_proxy.Text = "1. 代理";
             this.tabPage_proxy.UseVisualStyleBackColor = true;
@@ -202,9 +204,9 @@ namespace ScoopTools
             // 
             this.button_proxy_get.Location = new System.Drawing.Point(27, 29);
             this.button_proxy_get.Name = "button_proxy_get";
-            this.button_proxy_get.Size = new System.Drawing.Size(311, 42);
+            this.button_proxy_get.Size = new System.Drawing.Size(139, 42);
             this.button_proxy_get.TabIndex = 0;
-            this.button_proxy_get.Text = "获取Github代理";
+            this.button_proxy_get.Text = "获取Github代理[弃用]";
             this.button_proxy_get.UseVisualStyleBackColor = true;
             this.button_proxy_get.Click += new System.EventHandler(this.button_proxy_get_Click);
             // 
@@ -711,9 +713,9 @@ namespace ScoopTools
             this.tabPage_search.Controls.Add(this.label9);
             this.tabPage_search.Controls.Add(this.label7);
             this.tabPage_search.Controls.Add(this.textBox_search);
-            this.tabPage_search.Location = new System.Drawing.Point(4, 26);
+            this.tabPage_search.Location = new System.Drawing.Point(4, 22);
             this.tabPage_search.Name = "tabPage_search";
-            this.tabPage_search.Size = new System.Drawing.Size(770, 370);
+            this.tabPage_search.Size = new System.Drawing.Size(770, 374);
             this.tabPage_search.TabIndex = 5;
             this.tabPage_search.Text = "5. Search";
             this.tabPage_search.UseVisualStyleBackColor = true;
@@ -909,6 +911,16 @@ namespace ScoopTools
             this.textBox_log.Size = new System.Drawing.Size(778, 314);
             this.textBox_log.TabIndex = 4;
             // 
+            // button_proxy_get2
+            // 
+            this.button_proxy_get2.Location = new System.Drawing.Point(172, 29);
+            this.button_proxy_get2.Name = "button_proxy_get2";
+            this.button_proxy_get2.Size = new System.Drawing.Size(139, 42);
+            this.button_proxy_get2.TabIndex = 0;
+            this.button_proxy_get2.Text = "获取Github代理-New";
+            this.button_proxy_get2.UseVisualStyleBackColor = true;
+            this.button_proxy_get2.Click += new System.EventHandler(this.button_proxy_get2_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1014,6 +1026,7 @@ namespace ScoopTools
         private System.Windows.Forms.Button button_bucket_fix;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button button_search_update_proxy;
+        private System.Windows.Forms.Button button_proxy_get2;
     }
 }
 

@@ -878,5 +878,23 @@ namespace ScoopTools
             File.WriteAllText(file, content);
             Log("Done.\r\n");
         }
+
+        private async void button_proxy_get2_Click(object sender, EventArgs e)
+        {
+            Log("\r\n正在请求可用github Proxy...\r\n");
+            proxyList = await scoopActions.getGithubProxyList2();
+            Log($"获取成功，一共 [ {proxyList.Count} ] 记录:\r\n\r\n- 序号 - URL --------\r\n");
+            for (var i = 0; i < proxyList.Count; i++)
+            {
+                var p = proxyList[i];
+                Log($" [{(i + 1).ToString("D3")}] - {p.url}\r\n");
+            }
+
+            if (proxyList.Count > 0)
+            {
+                textBox_proxy_url.Text = proxyList[0].url;
+                label_status.Text = "已选择第一个proxy，建议测试最佳proxy后使用，或者手动填写!";
+            }
+        }
     }
 }

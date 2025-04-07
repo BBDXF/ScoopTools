@@ -351,6 +351,46 @@ namespace ScoopTools
 
             return list;
         }
+        public async Task<List<GithubProxy>> getGithubProxyList2()
+        {
+            var list = new List<GithubProxy>();
+            var resp = await HttpGet("https://status.akams.cn/status/services");
+            if (resp == null || resp.Length == 0)
+            {
+                return list;
+            }
+            var dt_start = resp.IndexOf("window.preloadData");
+            var dt_end = resp.IndexOf("</script>", dt_start);
+            var dt_index1 = resp.IndexOf(@"'name':'GitHub \u516C\u76CA\u4EE3\u7406'", dt_start);
+            while(dt_index1>0 && dt_index1 < dt_end)
+            {
+                var dt_index2 = resp.IndexOf("'url':'", dt_index1);
+                var dt_index3 = resp.IndexOf("'", dt_index2 + 7);
+                if(dt_index2>0 && dt_index3 > 0)
+                {
+                    var url = resp.Substring(dt_index2 + 7, dt_index3 - dt_index2 - 7);
+                    dt_index1 = dt_index3 + 1;
+                    url = System.Text.RegularExpressions.Regex.Unescape(url);
+                    if (url.EndsWith("/"))
+                    {
+                        url.Substring(0, url.Length - 1);
+                    }
+
+                    var proxy = new GithubProxy();
+                    proxy.url = url;
+                    list.Add(proxy);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // sort by latency
+            //list.Sort(new GithubProxyComparer());
+
+            return list;
+        }
         public async Task<int> checkUrlDelay(string url)
         {
             var delay = 9999; // timeout
